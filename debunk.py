@@ -94,42 +94,60 @@ def wrap_text(text, max_width, canvas_obj):
     
     return lines
 
+def clean_text(text):
+    # Replace or remove any unwanted characters, such as the square symbols
+    cleaned_text=text.replace("■", "")  # Specifically remove the ■ character
+    cleaned_text=re.sub(r'[^\x20-\x7E\n]', '', cleaned_text)  # Remove non-printable characters
+    return cleaned_text
+
 def create_final_pdf():
     output_pdf='facts/facts.pdf'
     os.makedirs('facts', exist_ok=True)
 
     c=canvas.Canvas(output_pdf, pagesize=letter)
-    width, height=letter
-    margin_x=50  # Left margin
-    margin_y=50  # Bottom margin
-    max_width=width - 2 * margin_x  # Width available for text
+    c.drawString(100, 750, "Debunked Facts Report")
 
-    c.drawString(margin_x, height - margin_y, "Debunked Facts Report")
-
-    y=height - (margin_y + 20)
+    y=730
     for i in range(1, 201):
         debunked_file=f"facts/{i}.txt"
         if os.path.exists(debunked_file):
             with open(debunked_file, 'r') as f:
                 debunked_text=f.read()
 
-            c.drawString(margin_x, y, f"Fact {i}:")
+            # Clean the debunked text to remove unwanted characters
+            cleaned_text=clean_text(debunked_text)
+
+            # Draw fact number and cleaned text
+            c.drawString(100, y, f"Fact {i}:")
             y -= 20
 
-            # Wrap the debunked text into multiple lines
-            wrapped_lines=wrap_text(debunked_text, max_width, c)
-
-            # Draw each wrapped line
-            for line in wrapped_lines:
-                c.drawString(margin_x, y, line)
-                y -= 20
-
-                # If we run out of vertical space, create a new page
-                if y < margin_y:
-                    c.showPage()
-                    y=height - margin_y
+            # Wrap text and adjust position for multi-line content
+            for line in cleaned_text.splitlines():
+                wrapped_lines=split_into_wrapped_lines(line, max_width=80)  # Adjust max_width as needed
+                for wrapped_line in wrapped_lines:
+                    c.drawString(100, y, wrapped_line)
+                    y -= 15
+                    if y < 100:  # Start a new page if the current page is full
+                        c.showPage()
+                        y=750
 
     c.save()
+
+def split_into_wrapped_lines(text, max_width=80):
+    # Helper function to wrap text based on max width
+    words=text.split(' ')
+    lines=[]
+    current_line=""
+    for word in words:
+        if len(current_line) + len(word) + 1 <= max_width:
+            current_line += word + " "
+        else:
+            lines.append(current_line.strip())
+            current_line=word + " "
+    if current_line:
+        lines.append(current_line.strip())
+    return lines
+
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
@@ -148,4 +166,3 @@ if __name__ == "__main__":
     create_final_pdf()
 
     logging.info("Debunking process complete. Check the 'facts' folder for results.")
-
