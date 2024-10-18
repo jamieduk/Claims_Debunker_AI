@@ -104,7 +104,9 @@ def create_final_pdf():
     output_pdf='facts/facts.pdf'
     os.makedirs('facts', exist_ok=True)
 
+    # Create a canvas for the PDF and set the title
     c=canvas.Canvas(output_pdf, pagesize=letter)
+    c.setTitle("Debunked-AI")  # Set the PDF title here
     c.drawString(100, 750, "Debunked Facts Report")
 
     y=730
@@ -132,6 +134,7 @@ def create_final_pdf():
                         y=750
 
     c.save()
+
 
 def split_into_wrapped_lines(text, max_width=80):
     # Helper function to wrap text based on max width
@@ -166,3 +169,4 @@ if __name__ == "__main__":
     create_final_pdf()
 
     logging.info("Debunking process complete. Check the 'facts' folder for results.")
+
