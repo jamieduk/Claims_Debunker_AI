@@ -1,0 +1,25 @@
+Claim Debunker AI Created By Jay Mee @ J~Net 2024
+
+
+
+put the pdf file that has all the claims to be debunked in same folder as script!
+
+
+sudo apt install -y tesseract-ocr
+sudo apt install -y tesseract-ocr-eng
+
+python -m venv venv
+source venv/bin/activate
+
+pip install pytesseract
+pip install pdf2image
+pip install ollama
+pip install numpy
+
+python debunk.py
+
+claims to be stored in claims folder!
+the actual facts will be stored in a folder called facts!
+a new pdf file called facts.pdf will be stored in facts folder!
+
+
