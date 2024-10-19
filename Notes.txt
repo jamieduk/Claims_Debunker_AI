@@ -1,8 +1,6 @@
 Claim Debunker AI Created By Jay Mee @ J~Net 2024
 
-
-
-put the pdf file that has all the claims to be debunked in same folder as script!
+Put the pdf file(s) that has all the claims to be debunked in same folder as script!
 
 
 sudo apt install -y tesseract-ocr
