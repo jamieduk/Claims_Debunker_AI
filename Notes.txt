@@ -2,6 +2,9 @@ Claim Debunker AI Created By Jay Mee @ J~Net 2024
 
 Put the pdf file(s) that has all the claims to be debunked in same folder as script!
 
+call the text file input.txt
+
+python convert_txt_to_pdf.py
 
 sudo apt install -y tesseract-ocr
 sudo apt install -y tesseract-ocr-eng
@@ -19,5 +22,6 @@ python debunk.py
 claims to be stored in claims folder!
 the actual facts will be stored in a folder called facts!
 a new pdf file called facts.pdf will be stored in facts folder!
+
 
 
